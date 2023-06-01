@@ -20,18 +20,22 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && isGround && !isDead)
+        if (Input.GetKeyDown(Settings.moveUp) && isGround && !isDead)
         {
             rigidbody2d.AddForce(new Vector2(0f, jumpForce));
             isGround = false;
         }
-        if (Input.GetKey(KeyCode.D) && !isDead)
+        if (Input.GetKey(Settings.moveRight) && !isDead)
         {
             rigidbody2d.velocity = new Vector2(speedForce, rigidbody2d.velocity.y);
         }
-        if (Input.GetKey(KeyCode.A) && !isDead)
+        if (Input.GetKey(Settings.moveLeft) && !isDead)
         {
             rigidbody2d.velocity = new Vector2(-speedForce, rigidbody2d.velocity.y);
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);
         }
     }
 
@@ -41,16 +45,20 @@ public class Character : MonoBehaviour
         {
             isGround = true;
         }
-        if (collision.gameObject.tag == "Enemy")
-        {
-            isDead = true;
-            StartCoroutine(dead());
-        }
     }
 
     IEnumerator dead()
     {
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            isDead = true;
+            StartCoroutine(dead());
+        }
     }
 }
