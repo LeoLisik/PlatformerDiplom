@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
@@ -37,6 +38,19 @@ public class Character : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+
+        if (rigidbody2d.velocity.x < 0)
+        {
+            Quaternion rotation = transform.rotation;
+            rotation.y = 180;
+            transform.rotation = rotation;
+        }
+        if (rigidbody2d.velocity.x > 0)
+        {
+            Quaternion rotation = transform.rotation;
+            rotation.y = 0;
+            transform.rotation = rotation;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -44,6 +58,12 @@ public class Character : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isGround = true;
+        }
+        if (collision.gameObject.tag == "Eatable")
+        {
+            collision.gameObject.GetComponent<Fruit>().gainBoost(this);
+            Destroy(collision.gameObject.GetComponent<Collider2D>());
+            Destroy(collision.gameObject.GetComponent<SpriteRenderer>());
         }
     }
 
@@ -55,10 +75,23 @@ public class Character : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Respawn")
         {
             isDead = true;
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().dampTime = 2;
             StartCoroutine(dead());
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Tree" && Input.GetKeyDown(Settings.use)) {
+            (collision.gameObject.GetComponent<Tree>()).getFruit();
+        }
+        if (collision.gameObject.tag == "Finish" && Input.GetKeyUp(Settings.use))
+        {
+            collision.gameObject.GetComponent<Bus>().startExit();
+            this.gameObject.SetActive(false);
         }
     }
 }

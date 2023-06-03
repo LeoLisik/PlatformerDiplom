@@ -9,6 +9,7 @@ public static class Settings : object
     public static KeyCode moveUp = KeyCode.W;
     public static KeyCode moveLeft = KeyCode.A;
     public static KeyCode moveRight = KeyCode.D;
+    public static KeyCode use = KeyCode.E;
 
     private static string settingsPath = Application.dataPath + "/Data/Settings.txt";
 
@@ -17,11 +18,12 @@ public static class Settings : object
         moveUp = KeyCode.W;
         moveLeft = KeyCode.A;
         moveRight = KeyCode.D;
+        use = KeyCode.E;
     }
 
     public static void saveSettings() 
     {
-        SettingsSave settings = new SettingsSave() { moveUp = moveUp, moveLeft = moveLeft, moveRight = moveRight };
+        SettingsSave settings = new SettingsSave() { moveUp = moveUp, moveLeft = moveLeft, moveRight = moveRight, use = use };
         string json = JsonUtility.ToJson(settings);
         File.WriteAllText(settingsPath, json);
     }
@@ -35,6 +37,7 @@ public static class Settings : object
             moveUp = settings.moveUp;
             moveLeft = settings.moveLeft;
             moveRight = settings.moveRight;
+            use = settings.use;
         } else
         {
             resetSettings();
@@ -51,4 +54,6 @@ public class SettingsSave
     public KeyCode moveLeft;
     [SerializeField]
     public KeyCode moveRight;
+    [SerializeField]
+    public KeyCode use;
 }
