@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class Character : MonoBehaviour
     public bool isGround;
     public float jumpForce = 300f;
     public float speedForce = 5f;
+
+    public static event Action ActionButtonPressed;
 
     private Rigidbody2D rigidbody2d;
     // Start is called before the first frame update
@@ -37,6 +41,23 @@ public class Character : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+        if (Input.GetKeyDown(Settings.use))
+        {
+            ActionButtonPressed?.Invoke();
+        }
+
+        if (rigidbody2d.velocity.x < 0)
+        {
+            Quaternion rotation = transform.rotation;
+            rotation.y = 180;
+            transform.rotation = rotation;
+        }
+        if (rigidbody2d.velocity.x > 0)
+        {
+            Quaternion rotation = transform.rotation;
+            rotation.y = 0;
+            transform.rotation = rotation;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -45,20 +66,52 @@ public class Character : MonoBehaviour
         {
             isGround = true;
         }
+        if (collision.gameObject.tag == "Eatable")
+        {
+            collision.gameObject.GetComponent<Fruit>().gainBoost(this);
+            Destroy(collision.gameObject.GetComponent<Collider2D>());
+            Destroy(collision.gameObject.GetComponent<SpriteRenderer>());
+        }
+        if (collision.gameObject.tag == "Enemy")
+        {
+            StartCoroutine(dead());
+        }
     }
 
     IEnumerator dead()
     {
+        isDead = true;
+        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().dampTime = 2;
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Respawn")
         {
-            isDead = true;
             StartCoroutine(dead());
+        }
+        if (collision.gameObject.tag == "Tree")
+        {
+            ActionButtonPressed += collision.gameObject.GetComponent<Tree>().getFruit;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Tree")
+        {
+            ActionButtonPressed -= collision.gameObject.GetComponent<Tree>().getFruit;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Finish" && Input.GetKeyUp(Settings.use))
+        {
+            collision.gameObject.GetComponent<Bus>().startExit();
+            this.gameObject.SetActive(false);
         }
     }
 }
