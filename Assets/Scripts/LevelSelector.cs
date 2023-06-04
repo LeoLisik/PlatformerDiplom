@@ -8,7 +8,7 @@ public class LevelSelector : MonoBehaviour
 {
     void Start()
     {
-        Settings.loadSettings();
+        //Settings.loadSettings();
     }
 
     void Update()
