@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class Character : MonoBehaviour
     public bool isGround;
     public float jumpForce = 300f;
     public float speedForce = 5f;
+
+    public static event Action ActionButtonPressed;
 
     private Rigidbody2D rigidbody2d;
     // Start is called before the first frame update
@@ -38,6 +41,10 @@ public class Character : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+        if (Input.GetKeyDown(Settings.use))
+        {
+            ActionButtonPressed?.Invoke();
+        }
 
         if (rigidbody2d.velocity.x < 0)
         {
@@ -65,10 +72,16 @@ public class Character : MonoBehaviour
             Destroy(collision.gameObject.GetComponent<Collider2D>());
             Destroy(collision.gameObject.GetComponent<SpriteRenderer>());
         }
+        if (collision.gameObject.tag == "Enemy")
+        {
+            StartCoroutine(dead());
+        }
     }
 
     IEnumerator dead()
     {
+        isDead = true;
+        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().dampTime = 2;
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -77,17 +90,24 @@ public class Character : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Respawn")
         {
-            isDead = true;
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().dampTime = 2;
             StartCoroutine(dead());
+        }
+        if (collision.gameObject.tag == "Tree")
+        {
+            ActionButtonPressed += collision.gameObject.GetComponent<Tree>().getFruit;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Tree")
+        {
+            ActionButtonPressed -= collision.gameObject.GetComponent<Tree>().getFruit;
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Tree" && Input.GetKeyDown(Settings.use)) {
-            (collision.gameObject.GetComponent<Tree>()).getFruit();
-        }
         if (collision.gameObject.tag == "Finish" && Input.GetKeyUp(Settings.use))
         {
             collision.gameObject.GetComponent<Bus>().startExit();
