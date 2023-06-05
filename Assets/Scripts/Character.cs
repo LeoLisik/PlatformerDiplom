@@ -14,11 +14,14 @@ public class Character : MonoBehaviour
 
     public static event Action ActionButtonPressed;
 
+    private int money = 0;
     private Rigidbody2D rigidbody2d;
+    private Animator animator;  
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -27,15 +30,18 @@ public class Character : MonoBehaviour
         if (Input.GetKeyDown(Settings.moveUp) && isGround && !isDead)
         {
             rigidbody2d.AddForce(new Vector2(0f, jumpForce));
+            animator.SetBool("isJump", true);
             isGround = false;
         }
         if (Input.GetKey(Settings.moveRight) && !isDead)
         {
             rigidbody2d.velocity = new Vector2(speedForce, rigidbody2d.velocity.y);
+            animator.SetBool("isMove", true);
         }
         if (Input.GetKey(Settings.moveLeft) && !isDead)
         {
             rigidbody2d.velocity = new Vector2(-speedForce, rigidbody2d.velocity.y);
+            animator.SetBool("isMove", true);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -44,6 +50,14 @@ public class Character : MonoBehaviour
         if (Input.GetKeyDown(Settings.use))
         {
             ActionButtonPressed?.Invoke();
+        }
+        if (!Input.GetKey(Settings.moveLeft) && !Input.GetKey(Settings.moveRight))
+        {
+            animator.SetBool("isMove", false);
+        }
+        if (Input.GetKeyDown(Settings.restart))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         if (rigidbody2d.velocity.x < 0)
@@ -65,12 +79,18 @@ public class Character : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isGround = true;
+            animator.SetBool("isJump", false);
         }
         if (collision.gameObject.tag == "Eatable")
         {
             collision.gameObject.GetComponent<Fruit>().gainBoost(this);
             Destroy(collision.gameObject.GetComponent<Collider2D>());
             Destroy(collision.gameObject.GetComponent<SpriteRenderer>());
+        }
+        if (collision.gameObject.tag == "Money")
+        {
+            money += 1;
+            Destroy(collision.gameObject);
         }
         if (collision.gameObject.tag == "Enemy")
         {
@@ -81,6 +101,7 @@ public class Character : MonoBehaviour
     IEnumerator dead()
     {
         isDead = true;
+        animator.SetBool("isDeath", true);
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().dampTime = 2;
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -110,8 +131,11 @@ public class Character : MonoBehaviour
     {
         if (collision.gameObject.tag == "Finish" && Input.GetKeyUp(Settings.use))
         {
-            collision.gameObject.GetComponent<Bus>().startExit();
-            this.gameObject.SetActive(false);
+            if (money >= collision.gameObject.GetComponent<Bus>().payment)
+            {
+                collision.gameObject.GetComponent<Bus>().startExit();
+                this.gameObject.SetActive(false);
+            } //TODO: Текст если денег недостаточно
         }
     }
 }

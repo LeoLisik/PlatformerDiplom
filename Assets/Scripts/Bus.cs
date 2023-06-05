@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Bus : MonoBehaviour
 {
+    public int payment = 0;
     public void startExit()
     {
         this.GetComponent<AudioSource>().Play();
@@ -20,7 +21,7 @@ public class Bus : MonoBehaviour
             this.transform.position = pos;
             yield return new WaitForSeconds(0.03f);
         }
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(0);
     }
 }

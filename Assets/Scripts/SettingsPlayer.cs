@@ -8,9 +8,10 @@ using System;
 public class SettingsPlayer : MonoBehaviour
 {
     public TMP_Text up;
-    //public TMP_Text used;
     public TMP_Text left;
     public TMP_Text right;
+    public TMP_Text use;
+    public TMP_Text restart;
 
     void Start()
     {
@@ -23,6 +24,8 @@ public class SettingsPlayer : MonoBehaviour
         up.text = Settings.moveUp.ToString();
         left.text = Settings.moveLeft.ToString();
         right.text = Settings.moveRight.ToString();
+        use.text = Settings.use.ToString();
+        restart.text = Settings.restart.ToString();
     }
 
     public void ResetSettings()
@@ -31,9 +34,9 @@ public class SettingsPlayer : MonoBehaviour
         SetKeyCodeButtons();
     }
 
-    public void ChangeJump(String wop)
+    public void Change(String but)
     {
-        StartCoroutine(SetButton(wop));
+        StartCoroutine(SetButton(but));
     }
 
     IEnumerator SetButton(string button)
@@ -60,6 +63,18 @@ public class SettingsPlayer : MonoBehaviour
                         if (button == "left") {
                             Settings.moveLeft = keyCode;
                             left.text = keyCode.ToString();
+                            return true;
+                        }
+                        if (button == "use")
+                        {
+                            Settings.use = keyCode;
+                            use.text = keyCode.ToString();
+                            return true;
+                        }
+                        if (button == "restart")
+                        {
+                            Settings.restart = keyCode;
+                            restart.text = keyCode.ToString();
                             return true;
                         }
                     }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class TrafficLight : MonoBehaviour
 {
     public float walkRange = 1f;
+    public float moveSpeed = 0.007f;
 
     private bool isWalkRight = true;
     private Vector2 startPos;
@@ -15,7 +16,7 @@ public class TrafficLight : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (isWalkRight && transform.position.x >= startPos.x + walkRange)
         {
@@ -23,7 +24,7 @@ public class TrafficLight : MonoBehaviour
         }
         if (isWalkRight && transform.position.x < startPos.x + walkRange)
         {
-            transform.position = new Vector2(transform.position.x + 0.01f, transform.position.y);
+            transform.position = new Vector2(transform.position.x + moveSpeed, transform.position.y);
         }
         if (!isWalkRight && transform.position.x <= startPos.x - walkRange)
         {
@@ -31,7 +32,7 @@ public class TrafficLight : MonoBehaviour
         }
         if (!isWalkRight && transform.position.x > startPos.x - walkRange)
         {
-            transform.position = new Vector2(transform.position.x - 0.01f, transform.position.y);
+            transform.position = new Vector2(transform.position.x - moveSpeed, transform.position.y);
         }
     }
 }

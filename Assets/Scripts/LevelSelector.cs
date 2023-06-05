@@ -44,29 +44,4 @@ public class LevelSelector : MonoBehaviour
     {
         SceneManager.LoadScene(5);
     }
-
-    public void GotoLevel6()
-    {
-        SceneManager.LoadScene(6);
-    }
-
-    public void GotoLevel7()
-    {
-        SceneManager.LoadScene(7);
-    }
-
-    public void GotoLevel8()
-    {
-        SceneManager.LoadScene(8);
-    }
-
-    public void GotoLevel9()
-    {
-        SceneManager.LoadScene(9);
-    }
-
-    public void GotoLevel10()
-    {
-        SceneManager.LoadScene(10);
-    }
 }
