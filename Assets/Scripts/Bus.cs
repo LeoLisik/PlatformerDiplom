@@ -21,6 +21,10 @@ public class Bus : MonoBehaviour
             this.transform.position = pos;
             yield return new WaitForSeconds(0.03f);
         }
+        if (PlayerPrefs.GetInt("openLevel") < SceneManager.GetActiveScene().buildIndex)
+        {
+            PlayerPrefs.SetInt("openLevel", SceneManager.GetActiveScene().buildIndex + 1);
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         //SceneManager.LoadScene(0);
     }

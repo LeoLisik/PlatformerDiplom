@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelSelector : MonoBehaviour
 {
-    void Start()
-    {
-        //Settings.loadSettings();
-    }
-
+    public TMP_Text ErrorObject;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -27,21 +24,62 @@ public class LevelSelector : MonoBehaviour
 
     public void GotoLevel2()
     {
-        SceneManager.LoadScene(2);
+        if (PlayerPrefs.GetInt("openLevel") >= 2)
+        {
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            StartCoroutine(printError("Уровень закрыт!"));
+        }
     }
 
     public void GotoLevel3()
     {
-        SceneManager.LoadScene(3);
+        if (PlayerPrefs.GetInt("openLevel") >= 3)
+        {
+            SceneManager.LoadScene(3);
+        }
+        else
+        {
+            StartCoroutine(printError("Уровень закрыт!"));
+        }
     }
 
     public void GotoLevel4()
     {
-        SceneManager.LoadScene(4);
+        if (PlayerPrefs.GetInt("openLevel") >= 4)
+        {
+            SceneManager.LoadScene(4);
+        }
+        else
+        {
+            StartCoroutine(printError("Уровень закрыт!"));
+        }
     }
 
     public void GotoLevel5()
     {
-        SceneManager.LoadScene(5);
+        if (PlayerPrefs.GetInt("openLevel") >= 5)
+        {
+            SceneManager.LoadScene(5);
+        } 
+        else
+        {
+            StartCoroutine(printError("Уровень закрыт!"));
+        }
+    }
+
+    public void GotoMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    IEnumerator printError(string textError)
+    {
+        ErrorObject.text = textError;
+        ErrorObject.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2);
+        ErrorObject.gameObject.SetActive(false);
     }
 }
