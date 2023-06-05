@@ -30,7 +30,7 @@ public class LevelSelector : MonoBehaviour
         }
         else
         {
-            StartCoroutine(printError("Уровень закрыт!"));
+            StartCoroutine(printError("Закрыто!"));
         }
     }
 
@@ -42,7 +42,7 @@ public class LevelSelector : MonoBehaviour
         }
         else
         {
-            StartCoroutine(printError("Уровень закрыт!"));
+            StartCoroutine(printError("Закрыто!"));
         }
     }
 
@@ -54,7 +54,7 @@ public class LevelSelector : MonoBehaviour
         }
         else
         {
-            StartCoroutine(printError("Уровень закрыт!"));
+            StartCoroutine(printError("Закрыто!"));
         }
     }
 
@@ -66,7 +66,7 @@ public class LevelSelector : MonoBehaviour
         } 
         else
         {
-            StartCoroutine(printError("Уровень закрыт!"));
+            StartCoroutine(printError("Закрыто!"));
         }
     }
 
