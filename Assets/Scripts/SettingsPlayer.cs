@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
+using System.Globalization;
+using static System.Net.Mime.MediaTypeNames;
 
 public class SettingsPlayer : MonoBehaviour
 {
@@ -34,49 +37,89 @@ public class SettingsPlayer : MonoBehaviour
         SetKeyCodeButtons();
     }
 
-    public void Change(String but)
+    public void Change(string key)
     {
-        StartCoroutine(SetButton(but));
+        StartCoroutine(SetButton(key));
     }
 
-    IEnumerator SetButton(string button)
+    IEnumerator SetButton(string key)
     {
-        yield return new WaitUntil(() => {
-            if (Input.anyKeyDown) {
+        KeyCode keyCodeBut = KeyCode.Space;
+        TMP_Text textBut = null;
+        yield return new WaitUntil(() =>
+        {
+            if (key == "up")
+            {
+                textBut = up;
+                keyCodeBut = Settings.moveUp;
+                //Settings.moveUp = keyCode;
+                //up.text = keyCode.ToString();
+            }
+            if (key == "right")
+            {
+                textBut = right;
+                keyCodeBut = Settings.moveRight;
+            }
+            if (key == "left")
+            {
+                textBut = left;
+                keyCodeBut = Settings.moveLeft;
+            }
+            if (key == "use")
+            {
+                textBut = use;
+                keyCodeBut = Settings.use;
+            }
+            if (key == "restart")
+            {
+                textBut = restart;
+                keyCodeBut = Settings.restart;
+            }
+            textBut.text = "ֽאזלטעו";
+            if (Input.anyKeyDown)
+            {
                 if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
                 {
+                    textBut.text = keyCodeBut.ToString();
                     return true;
                 }
                 Array keyCodes = Enum.GetValues(typeof(KeyCode));
-                foreach (KeyCode keyCode in keyCodes) {
-                    if (Input.GetKey(keyCode)) {
-                        if (button == "up") {
+                foreach (KeyCode keyCode in keyCodes)
+                {
+                    if (Input.GetKey(keyCode))
+                    {
+                        if (key == "up")
+                        {
                             Settings.moveUp = keyCode;
                             up.text = keyCode.ToString();
                             return true;
                         }
-                        if (button == "right") {
+                        if (key == "right")
+                        {
                             Settings.moveRight = keyCode;
                             right.text = keyCode.ToString();
                             return true;
                         }
-                        if (button == "left") {
+                        if (key == "left")
+                        {
                             Settings.moveLeft = keyCode;
                             left.text = keyCode.ToString();
                             return true;
                         }
-                        if (button == "use")
+                        if (key == "use")
                         {
                             Settings.use = keyCode;
                             use.text = keyCode.ToString();
                             return true;
                         }
-                        if (button == "restart")
+                        if (key == "restart")
                         {
                             Settings.restart = keyCode;
                             restart.text = keyCode.ToString();
                             return true;
                         }
+                        return true;
+
                     }
                 }
                 return true;
@@ -85,9 +128,10 @@ public class SettingsPlayer : MonoBehaviour
         });
     }
 
+
     public void QuitGame()
     {
         Settings.saveSettings();
-        Application.Quit();
+        UnityEngine.Application.Quit();
     }
 }

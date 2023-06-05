@@ -1,1 +1,1 @@
-{"moveUp":119,"moveLeft":97,"moveRight":100,"use":100,"restart":99}
+{"moveUp":119,"moveLeft":97,"moveRight":100,"use":101,"restart":114}
