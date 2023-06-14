@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using System.Globalization;
-using static System.Net.Mime.MediaTypeNames;
+using UnityEditor;
 
 public class SettingsPlayer : MonoBehaviour
 {
@@ -52,8 +50,6 @@ public class SettingsPlayer : MonoBehaviour
             {
                 textBut = up;
                 keyCodeBut = Settings.moveUp;
-                //Settings.moveUp = keyCode;
-                //up.text = keyCode.ToString();
             }
             if (key == "right")
             {
@@ -128,10 +124,14 @@ public class SettingsPlayer : MonoBehaviour
         });
     }
 
+    private void OnDestroy()
+    {
+        Settings.saveSettings();
+    }
 
     public void QuitGame()
     {
         Settings.saveSettings();
-        UnityEngine.Application.Quit();
+        Application.Quit();
     }
 }

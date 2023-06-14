@@ -47,7 +47,7 @@ public class Character : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
-        if (Input.GetKeyDown(Settings.use))
+        if (Input.GetKeyDown(Settings.use) && !isDead)
         {
             ActionButtonPressed?.Invoke();
         }

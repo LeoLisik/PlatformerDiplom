@@ -557,7 +557,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1769278319955061671, guid: 8975aca689a081a42a9c69f362e9b633, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.917549
+      value: -11.142
       objectReference: {fileID: 0}
     - target: {fileID: 1769278319955061671, guid: 8975aca689a081a42a9c69f362e9b633, type: 3}
       propertyPath: m_LocalPosition.z
@@ -594,6 +594,10 @@ PrefabInstance:
     - target: {fileID: 1769278319955061691, guid: 8975aca689a081a42a9c69f362e9b633, type: 3}
       propertyPath: m_Name
       value: TrafficLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154154452713379820, guid: 8975aca689a081a42a9c69f362e9b633, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8975aca689a081a42a9c69f362e9b633, type: 3}

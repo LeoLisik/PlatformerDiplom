@@ -607,7 +607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 599110409792882781, guid: 608ba01dee6430a4ebb9cdf2e1b23eeb, type: 3}
       propertyPath: payment
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 599110409792882783, guid: 608ba01dee6430a4ebb9cdf2e1b23eeb, type: 3}
       propertyPath: m_RootOrder
